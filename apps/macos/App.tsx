@@ -12,9 +12,11 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {WebView} from 'react-native-webview';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import tw from 'twrnc';
+
 export default function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -32,7 +34,9 @@ export default function App(): JSX.Element {
         <View style={tw`flex-2.3 w-full bg-gray-500`} />
         <View style={tw`flex flex-3.2 items-center flex-row`}>
           <View style={tw`flex flex-row h-full items-center`}>
-            <View style={tw`bg-blue-500 ml-3 h-10 w-10`} />
+            <Icon name="person" size={30} color="#4F8EF7" />
+            {/* <View style={tw`bg-blue-500 ml-3 h-10 w-10`} /> */}
+            {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
             <View style={tw`bg-red-500 mx-3 h-10 w-10`} />
             <View style={tw`bg-red-500 mr-3 h-10 w-10`} />
           </View>

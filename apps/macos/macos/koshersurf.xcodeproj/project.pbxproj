@@ -12,6 +12,8 @@
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
 		65DD9E9890F43744BC435328 /* libPods-koshersurf-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A380B45FA1C87F0245A8029 /* libPods-koshersurf-macOS.a */; };
+		EDCBD7A22AF01C7E006C2C8E /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = EDCBD7A12AF01C7E006C2C8E /* Fonts */; };
+		EDCBD7A32AF01C7E006C2C8E /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = EDCBD7A12AF01C7E006C2C8E /* Fonts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,7 @@
 		8A380B45FA1C87F0245A8029 /* libPods-koshersurf-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-koshersurf-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5EECB88B61C3DD13014CF78 /* Pods-koshersurf-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koshersurf-macOS.release.xcconfig"; path = "Target Support Files/Pods-koshersurf-macOS/Pods-koshersurf-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EDCBD7A12AF01C7E006C2C8E /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../../../../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +64,7 @@
 		5142014A2437B4B30078DB4F /* koshersurf-macOS */ = {
 			isa = PBXGroup;
 			children = (
+				EDCBD7A12AF01C7E006C2C8E /* Fonts */,
 				5142014B2437B4B30078DB4F /* AppDelegate.h */,
 				5142014C2437B4B30078DB4F /* AppDelegate.mm */,
 				514201512437B4B40078DB4F /* Assets.xcassets */,
@@ -108,7 +112,6 @@
 				1839E1E7F65BDE60ED268EF9 /* Pods-koshersurf-macOS.debug.xcconfig */,
 				C5EECB88B61C3DD13014CF78 /* Pods-koshersurf-macOS.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -196,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDCBD7A22AF01C7E006C2C8E /* Fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +207,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDCBD7A32AF01C7E006C2C8E /* Fonts in Resources */,
 				514201522437B4B40078DB4F /* Assets.xcassets in Resources */,
 				514201552437B4B40078DB4F /* Main.storyboard in Resources */,
 			);
