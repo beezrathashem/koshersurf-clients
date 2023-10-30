@@ -5,58 +5,17 @@
  * @format
  */
 
-import type { PropsWithChildren } from 'react';
-import React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
+  TextInput,
   View,
+  useColorScheme,
 } from 'react-native';
-import { parser } from "ui";
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
+import {WebView} from 'react-native-webview';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import tw from 'twrnc';
+export default function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -69,52 +28,30 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <Text>{parser.standard()}</Text>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+      <View style={tw`w-full h-20 border-b-2 border-white bg-black`}>
+        <View style={tw`flex-2.3 w-full bg-gray-500`} />
+        <View style={tw`flex flex-3.2 items-center flex-row`}>
+          <View style={tw`flex flex-row h-full items-center`}>
+            <View style={tw`bg-blue-500 ml-3 h-10 w-10`} />
+            <View style={tw`bg-red-500 mx-3 h-10 w-10`} />
+            <View style={tw`bg-red-500 mr-3 h-10 w-10`} />
+          </View>
+          <TextInput
+            style={tw`flex-1 h-full h-[80%] rounded-full border-[1.5px] border-white`}
+          />
+          <View style={tw`flex flex-row h-full items-center`}>
+            <View style={tw`bg-blue-500 ml-3 h-10 w-10`} />
+            <View style={tw`bg-red-500 mx-3 h-10 w-10`} />
+            <View style={tw`bg-red-500 mr-3 h-10 w-10`} />
+          </View>
         </View>
-      </ScrollView>
+      </View>
+      <View style={tw`w-full h-full`}>
+        <WebView
+          style={tw`flex h-full flex-1`}
+          source={{uri: 'https://google.com/'}}
+        />
+      </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
