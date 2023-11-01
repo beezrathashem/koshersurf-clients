@@ -14,11 +14,11 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "twrnc": "3.6.4",
     "react": "18.2.0",
     "react-native": "0.71.14",
     "react-native-webview": "13.6.2",
     "react-native-macos": "^0.71.0-0",
+    "react-native-vector-icons": "10.0.1",
     "ui": "*"
   },
   "devDependencies": {
@@ -26,7 +26,6 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^3.2.0",
-    "react-native-vector-icons": "10.0.1",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
