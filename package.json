@@ -19,7 +19,7 @@
     "turbo": "latest"
   },
   "name": "kosher",
-  "packageManager": "bun@1.0.7",
+  "packageManager": "yarn@1.0.7",
   "workspaces": {
     "packages": [
       "apps/*",
