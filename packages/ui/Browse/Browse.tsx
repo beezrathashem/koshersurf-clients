@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+// import Icon from "react-native-vector-icons/Ionicons";
 import { WebView } from "react-native-webview";
 import { formatTerm, formatUrl, rootUrl } from "../lib/string";
 import tw from "../lib/tw";
@@ -135,7 +135,7 @@ const Header = ({
                 </Text>
               </View>
               <TouchableOpacity onPress={() => {}}>
-                <Icon name="close" size={13} color={tw.color("foreground")} />
+                {/* <Icon name="close" size={13} color={tw.color("foreground")} /> */}
               </TouchableOpacity>
             </View>
             {tab !== 0 && tab !== 1 && (
@@ -175,26 +175,26 @@ const Header = ({
       <View style={tw`flex flex-3.2 items-center flex-row`}>
         <View style={tw`flex flex-row w-22 justify-evenly h-full items-center`}>
           <TouchableOpacity onPress={onBack}>
-            <Icon name="arrow-back" size={18} color={tw.color("foreground")} />
+            {/* <Icon name="arrow-back" size={18} color={tw.color("foreground")} /> */}
           </TouchableOpacity>
           <TouchableOpacity onPress={onForward}>
-            <Icon
+            {/* <Icon
               name="arrow-forward"
               size={18}
               color={tw.color("foreground")}
-            />
+            /> */}
           </TouchableOpacity>
           <TouchableOpacity onPress={onRefresh}>
-            <Icon name="refresh" size={18} color={tw.color("foreground")} />
+            {/* <Icon name="refresh" size={18} color={tw.color("foreground")} /> */}
           </TouchableOpacity>
         </View>
         <View style={tw`h-[50%] flex-1`}>
-          <Icon
+          {/* <Icon
             name="search"
             size={15}
             style={tw`absolute left-3 top-2`}
             color={tw.color("muted")}
-          />
+          /> */}
           <TextInput
             value={search}
             onSubmitEditing={onEnter}
@@ -206,7 +206,7 @@ const Header = ({
         <View
           style={tw`flex min-w-18 justify-evenly flex-row h-full items-center`}
         >
-          <Icon
+          {/* <Icon
             name="person-circle-outline"
             size={27}
             color={tw.color("foreground")}
@@ -215,7 +215,7 @@ const Header = ({
             name="ellipsis-vertical"
             size={18}
             color={tw.color("foreground")}
-          />
+          /> */}
         </View>
       </View>
     </View>
