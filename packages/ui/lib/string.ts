@@ -1,4 +1,4 @@
-export const rootUrl = "https://youtube.com";
+export const rootUrl = "https://google.com";
 
 function isValidDomain(domain: string) {
   const domainRegex =

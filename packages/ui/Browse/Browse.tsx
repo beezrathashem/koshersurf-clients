@@ -1,5 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useCallback, useRef, useState } from "react";
+import {
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { WebView } from "react-native-webview";
 import { formatTerm, formatUrl, rootUrl } from "../lib/string";
@@ -16,24 +23,11 @@ export const Browse = () => {
     url: "",
   });
 
-  // console.log("YOO", webview?.current);
-  useEffect(() => {
-    console.log("UPDATE??");
-  }, [webview?.current]);
-
-  console.log("URL", url);
   const onEnter = useCallback(() => {
     const { url, term } = formatUrl(search);
     setUrl(url);
     setSearch(term);
   }, [webview, search]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (!webview?.current) return;
-  //     webview.current.injectJavaScript(inject.initial);
-  //   }, 5000);
-  // }, []);
 
   return (
     <>
@@ -50,7 +44,6 @@ export const Browse = () => {
         <WebView
           ref={webview}
           onNavigationStateChange={(e) => console.log(e.url)}
-          // onNavigationStateChange={(e) => Alert.alert(e.url)}
           style={tw`flex h-full flex-1`}
           // injectedJavaScriptBeforeContentLoaded={inject.initial}
           forceDarkOn
@@ -65,8 +58,6 @@ export const Browse = () => {
               if (parsed.url) {
                 setPage(parsed);
                 setSearch(formatTerm(parsed.url));
-                // Now you can also access parsed.title, parsed.favicon, and parsed.description
-                // Use these values as needed in your component
               }
             }
           }}
@@ -119,25 +110,41 @@ const Header = ({
       <View
         style={tw`flex-2.3 flex-row px-22 w-full justify-start items-end bg-secondary`}
       >
-        <TouchableOpacity
-          onPress={() => setTab(0)}
-          style={{
-            ...tw`max-w-47 w-full bg-card h-[80%] rounded-t-2`,
-            backgroundColor: tab === 0 ? tw.color("card") : undefined,
-          }}
-        >
-          <View style={tw`flex-row pl-3 flex items-center h-full`}>
-            <Image source={{ uri: page?.favicon }} style={tw`h-4 w-4`} />
-            <Text numberOfLines={1} style={tw`text-foreground pl-2 pr-3.5`}>
-              {page?.title}
-            </Text>
-          </View>
-          {tab !== 0 && tab !== 1 && (
+        <TouchableWithoutFeedback onPress={() => setTab(0)}>
+          <View
+            style={{
+              ...tw`max-w-47 w-full bg-card h-[80%] rounded-t-2`,
+              backgroundColor: tab === 0 ? tw.color("card") : undefined,
+            }}
+          >
             <View
-              style={tw`bg-white opacity-50 h-[75%] w-[1px] absolute right-0 top-1`}
-            />
-          )}
-        </TouchableOpacity>
+              style={tw`flex-row px-3 justify-between flex items-center h-full`}
+            >
+              <View style={tw`flex flex-row items-center`}>
+                {page?.favicon && (
+                  <Image
+                    source={{ uri: page?.favicon }}
+                    style={tw`h-4 w-4 pr-2`}
+                  />
+                )}
+                <Text
+                  numberOfLines={1}
+                  style={tw`text-foreground text-xs pr-3.5`}
+                >
+                  {page?.title || "New Tab"}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => {}}>
+                <Icon name="close" size={13} color={tw.color("foreground")} />
+              </TouchableOpacity>
+            </View>
+            {tab !== 0 && tab !== 1 && (
+              <View
+                style={tw`bg-white opacity-50 h-[75%] w-[1px] absolute right-0 top-1`}
+              />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
         {/* <TouchableOpacity
           onPress={() => setTab(1)}
           style={{
