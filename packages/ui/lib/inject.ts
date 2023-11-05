@@ -203,10 +203,11 @@ const video = `
     // Style the CONTINUE button
     continueButton.style.position = 'absolute';
     continueButton.style.top = '50%';
-    continueButton.style.left = '50%';
-    continueButton.style.transform = 'translate(-50%, -50%)';
-    continueButton.style.zIndex = '10000';
+    continueButton.style.zIndex = '100000';
     continueButton.style.fontSize = '20px';
+
+    continueButton.style.height = video.offsetHeight ? video.offsetHeight + 'px' : '100%';
+    continueButton.style.width = video.offsetWidth ? video.offsetWidth + 'px' : '100%';
     continueButton.style.padding = '10px 20px';
     continueButton.style.border = 'none';
     continueButton.style.background = 'red';
@@ -261,6 +262,7 @@ HTMLVideoElement.prototype.play = function() {
     // Do nothing, effectively "overriding" the play action
   });
 };
+
 
 `;
 
