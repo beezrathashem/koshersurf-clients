@@ -1,4 +1,4 @@
-export const rootUrl = "https://youtube.com";
+export const rootUrl = "https://google.com";
 
 function isValidDomain(domain: string) {
   const domainRegex =
@@ -7,7 +7,7 @@ function isValidDomain(domain: string) {
 }
 
 export const formatTerm = (term: string) =>
-  term?.replace("https://", "").replace("http://", "").replace("www.", "");
+  term.replace("https://", "").replace("http://", "").replace("www.", "");
 
 export function formatUrl(value: string) {
   const term = `${formatTerm(value)}`;
