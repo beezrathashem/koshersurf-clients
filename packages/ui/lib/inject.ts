@@ -184,4 +184,80 @@ alert('done');
 true;
 `;
 
-export default { initial, processImages };
+const video = `
+(function() {
+  // Function to hide the video and create a CONTINUE button
+  function setupVideoAndButton(video) {
+    // Immediately pause the video and clear its source
+    video.pause();
+    video.removeAttribute('src'); // Remove any source if set
+    video.load(); // Load the video with the removed source to cancel any preloading
+
+    // Set the video visibility to hidden instead of changing the opacity
+    video.style.visibility = 'hidden';
+
+    // Create a CONTINUE button
+    var continueButton = document.createElement('button');
+    continueButton.textContent = 'CONTINUE';
+    // Style the CONTINUE button
+    continueButton.style.position = 'absolute';
+    continueButton.style.top = '50%';
+    continueButton.style.left = '50%';
+    continueButton.style.transform = 'translate(-50%, -50%)';
+    continueButton.style.zIndex = '10000';
+    continueButton.style.fontSize = '20px';
+    continueButton.style.padding = '10px 20px';
+    continueButton.style.border = 'none';
+    continueButton.style.background = 'red';
+    continueButton.style.color = 'white';
+    continueButton.style.cursor = 'pointer';
+
+    // Append the CONTINUE button to the video's parent element
+    video.parentNode.style.position = 'relative';
+    video.parentNode.appendChild(continueButton);
+
+    // Event listener for the CONTINUE button
+    continueButton.addEventListener('click', function() {
+      // Set the new video source
+      video.src = 'https://firebasestorage.googleapis.com/v0/b/beezrathashem-f811f.appspot.com/o/%D7%9C%D7%9E%D7%94%20%D7%94%D7%9E%D7%A6%D7%91%20%D7%91%D7%90%D7%A8%D7%A5%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20%D7%96%D7%A7%D7%95%D7%A7%20%D7%9C%D7%A2%D7%96%D7%A8%D7%AA%D7%9A%3F.mp4?alt=media&token=b1328a97-e721-4b61-932e-ed72f1708ecf';
+      video.load(); // Load the new source
+      video.style.visibility = 'visible'; // Make the video visible
+      video.play(); // Play the video
+      continueButton.remove(); // Remove the CONTINUE button
+    });
+  }
+
+  // Select the video element on the page
+  var videoElement = document.querySelector('video');
+
+  if (videoElement) {
+    setupVideoAndButton(videoElement);
+  } else {
+    console.error('No video element found on the page.');
+  }
+
+  // If the video element is inserted after some user interaction or dynamically, use a MutationObserver to detect when it is added to the DOM
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      mutation.addedNodes.forEach(function(node) {
+        if (node.tagName === 'VIDEO') {
+          setupVideoAndButton(node);
+        }
+      });
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  HTMLVideoElement.prototype.play = function() {
+    // Log or handle the attempt to play the video
+    console.log('Prevented video autoplay');
+    return new Promise((resolve, reject) => {
+      // Do nothing, effectively "overriding" the play action
+    });
+  };
+})();
+
+`;
+
+export default { initial, processImages, video };

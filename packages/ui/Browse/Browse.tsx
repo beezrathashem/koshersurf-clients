@@ -3,10 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useAtom, useAtomValue } from "jotai";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { View } from "react-native";
 import { WebView } from "react-native-webview";
 import { atoms } from "../lib/atoms";
+import inject from "../lib/inject";
 import { formatTerm, formatUrl, rootUrl } from "../lib/string";
 import tw from "../lib/tw";
 import type { Page } from "../types";
@@ -34,6 +35,14 @@ export function Browse() {
     [active]
   );
 
+  const current = useMemo(() => {
+    return tabs.find((tab) => tab.id === active)?.page;
+  }, [tabs, active]);
+
+  useEffect(() => {
+    webview.current?.injectJavaScript(inject.video);
+  }, [current?.url]);
+
   return (
     <>
       <Header
@@ -48,6 +57,8 @@ export function Browse() {
         <WebView
           forceDarkOn
           injectedJavaScript={`
+        ${inject.video}
+          
           let initialUrl = window.location.href;
         
           let getPageDetails = () => {
@@ -75,6 +86,8 @@ export function Browse() {
         
           setInterval(checkPageChange, 2000)
         `}
+          injectedJavaScriptBeforeContentLoaded={inject.video}
+          mediaPlaybackRequiresUserAction
           onMessage={(e) => {
             if (e.nativeEvent.data) {
               const parsed = JSON.parse(e.nativeEvent.data);
