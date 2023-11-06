@@ -57,7 +57,7 @@ export function Browse() {
         <WebView
           forceDarkOn
           injectedJavaScript={`
-        ${inject.video}
+
           
           let initialUrl = window.location.href;
         
@@ -86,8 +86,36 @@ export function Browse() {
         
           setInterval(checkPageChange, 2000)
         `}
-          injectedJavaScriptBeforeContentLoaded={inject.video}
+          // injectedJavaScriptBeforeContentLoaded={injectStyles}
+
+          // injectedJavaScriptBeforeContentLoaded={inject.video}
+          // onLoadEnd={() => {
+          //   webview.current?.injectJavaScript(inject.video);
+          // }}
+          injectedJavaScriptBeforeContentLoaded={`
+          ${inject.video}
+          const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+              if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+                mutation.addedNodes.forEach(node => {
+                  if (node.nodeName === 'IMG') {
+                    node.style.display = 'none';
+                  }
+                });
+              }
+            });
+          });
+        
+          observer.observe(document.body, { childList: true, subtree: true });
+        
+          `}
+          onNavigationStateChange={(e) => {
+            console.log(e.url);
+            webview.current?.injectJavaScript(inject.video);
+          }}
+          style={tw`flex h-full flex-1`}
           mediaPlaybackRequiresUserAction
+          // injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
           onMessage={(e) => {
             if (e.nativeEvent.data) {
               const parsed = JSON.parse(e.nativeEvent.data);
@@ -98,14 +126,10 @@ export function Browse() {
               }
             }
           }}
-          onNavigationStateChange={(e) => {
-            console.log(e.url);
-          }}
+          // useWebView2
           ref={webview}
           // injectedJavaScriptBeforeContentLoaded={inject.initial}
           source={{ uri: url }}
-          // useWebView2
-          style={tw`flex h-full flex-1`}
         />
       </View>
     </>

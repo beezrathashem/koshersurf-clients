@@ -184,61 +184,82 @@ alert('done');
 true;
 `;
 
-const video = `
-(function() {
+const video1 = `
+
+  var ytpElements = document.querySelectorAll('.ytp-chrome-bottom, .ytp-chrome-controls');
+  ytpElements.forEach(function(el) {
+    el.remove();
+  });
+
+  function replaceVideoWithClone(video) {
+    var clone = video.cloneNode(true);
+    clone.setAttribute('controls', 'true');
+  
+    // Pause and reset the original video to prevent it from playing in the background
+    video.pause();
+    video.removeAttribute('src'); // This will unload the video
+    video.load();
+  
+    // Replace the original video with the clone
+    video.parentNode.replaceChild(clone, video);
+    return clone;
+  }
+  
   var originalPlayMethod = HTMLVideoElement.prototype.play;
   // Function to hide the video and create a CONTINUE button
   function setupVideoAndButton(video) {
+    var newVideo = replaceVideoWithClone(video);
+    
     // Immediately pause the video and clear its source
-    video.pause();
-    video.removeAttribute('src'); // Remove any source if set
-    video.load(); // Load the video with the removed source to cancel any preloading
-
+    newVideo.pause();
+    newVideo.removeAttribute('src'); // Remove any source if set
+    newVideo.load(); // Load the video with the removed source to cancel any preloading
+  
     // Set the video visibility to hidden instead of changing the opacity
-    video.style.visibility = 'hidden';
-
+    newVideo.style.visibility = 'hidden';
+  
     // Create a CONTINUE button
     var continueButton = document.createElement('button');
     continueButton.textContent = 'CONTINUE';
     // Style the CONTINUE button
     continueButton.style.position = 'absolute';
-    continueButton.style.top = '50%';
     continueButton.style.zIndex = '100000';
     continueButton.style.fontSize = '20px';
-
-    continueButton.style.height = video.offsetHeight ? video.offsetHeight + 'px' : '100%';
-    continueButton.style.width = video.offsetWidth ? video.offsetWidth + 'px' : '100%';
+  
+    continueButton.style.height = newVideo.offsetHeight + 'px';
+    continueButton.style.width = newVideo.offsetWidth + 'px';
     continueButton.style.padding = '10px 20px';
     continueButton.style.border = 'none';
     continueButton.style.background = 'red';
     continueButton.style.color = 'white';
     continueButton.style.cursor = 'pointer';
-
-    // Append the CONTINUE button to the video's parent element
-    video.parentNode.style.position = 'relative';
-    video.parentNode.appendChild(continueButton);
-
+  
+    // Append the CONTINUE button to the higher level parent
+    var higherLevelParent = newVideo.parentNode.parentNode; // Adjust this to target the correct ancestor
+    higherLevelParent.style.position = 'relative';
+    higherLevelParent.insertBefore(continueButton, higherLevelParent.firstChild); // Insert it as the first child
+  
     // Event listener for the CONTINUE button
     continueButton.addEventListener('click', function() {
       // Set the new video source
       HTMLVideoElement.prototype.play = originalPlayMethod;
-      video.src = 'https://firebasestorage.googleapis.com/v0/b/beezrathashem-f811f.appspot.com/o/%D7%9C%D7%9E%D7%94%20%D7%94%D7%9E%D7%A6%D7%91%20%D7%91%D7%90%D7%A8%D7%A5%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20%D7%96%D7%A7%D7%95%D7%A7%20%D7%9C%D7%A2%D7%96%D7%A8%D7%AA%D7%9A%3F.mp4?alt=media&token=b1328a97-e721-4b61-932e-ed72f1708ecf';
-      video.load(); // Load the new source
-      video.style.visibility = 'visible'; // Make the video visible
-      video.play(); // Play the video
+      newVideo.src = 'https://firebasestorage.googleapis.com/v0/b/beezrathashem-f811f.appspot.com/o/%D7%9C%D7%9E%D7%94%20%D7%94%D7%9E%D7%A6%D7%91%20%D7%91%D7%90%D7%A8%D7%A5%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20%D7%96%D7%A7%D7%95%D7%A7%20%D7%9C%D7%A2%D7%96%D7%A8%D7%AA%D7%9A%3F.mp4?alt=media&token=b1328a97-e721-4b61-932e-ed72f1708ecf';
+      newVideo.load(); // Load the new source
+      newVideo.style.visibility = 'visible'; // Make the video visible
+      newVideo.play(); // Play the video
       continueButton.remove(); // Remove the CONTINUE button
     });
   }
-
+  
   // Select the video element on the page
   var videoElement = document.querySelector('video');
-
+  
   if (videoElement) {
     setupVideoAndButton(videoElement);
   } else {
     console.error('No video element found on the page.');
   }
-
+  
   // If the video element is inserted after some user interaction or dynamically, use a MutationObserver to detect when it is added to the DOM
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
@@ -248,22 +269,164 @@ const video = `
         }
       });
     });
-  });
-
+  });  
   observer.observe(document.body, { childList: true, subtree: true });
-})();
+  
+  HTMLVideoElement.prototype.play = function() {
+    // Log or handle the attempt to play the video
+    console.log('Prevented video autoplay');
+    return new Promise((resolve, reject) => {
+      // Do nothing, effectively "overriding" the play action
+    });
+  };
+true;
+`;
 
+// doesn't always work on some sites, doesn't work with content origin errors
+const video2 = `
+const videoSource = 'https://bh-lectures.s3.us-west-1.amazonaws.com/-_9AwxBcLg4-240.mp4';
 
-HTMLVideoElement.prototype.temp = HTMLVideoElement.prototype.play;
-HTMLVideoElement.prototype.play = function() {
-  // Log or handle the attempt to play the video
-  console.log('Prevented video autoplay');
-  return new Promise((resolve, reject) => {
-    // Do nothing, effectively "overriding" the play action
+// Function to update video sources
+function updateVideoSources() {
+  var videoElements = document.querySelectorAll('video');
+  
+  videoElements.forEach(function(video) {
+    // Check if the video src is not already set
+    if (video.src !== videoSource) {
+      video.src = videoSource;
+      video.crossOrigin = "anonymous";
+      video.setAttribute('controls', 'true'); // Ensure controls are enabled
+      video.load(); // Load the new video source
+      video.play(); // Load the new video source
+    }
   });
-};
+}
 
+// Start a loop that runs every second
+var intervalId = setInterval(updateVideoSources, 1000);
+true;
+`;
+
+const video3 = `
+const videoSource = 'https://bh-lectures.s3.us-west-1.amazonaws.com/-_9AwxBcLg4-240.mp4';
+
+function replaceVideo(videoElement) {
+  // Avoid replacing if the video source is already set
+  if (videoElement.src === videoSource) {
+    return;
+  }
+
+  // Create a new video element
+  const newVideo = document.createElement('video');
+
+  // Copying styles from the original video to the new one
+  newVideo.style.cssText = videoElement.style.cssText;
+  newVideo.style.width = '100%'; // Ensure the new video fits the container width
+  newVideo.style.height = '100%'; // Ensure the new video fits the container height
+
+  // Set the new source and attributes to the new video element
+  newVideo.src = videoSource;
+  newVideo.setAttribute('controls', ''); // Show video controls
+  newVideo.setAttribute('playsinline', ''); // Suggest to the browser that the video should play inline
+  newVideo.muted = false; // Make sure the video is not muted
+
+  // Replace the old video element with the new one
+  videoElement.parentNode.insertBefore(newVideo, videoElement);
+
+  // Remove the old video element
+  videoElement.parentNode.removeChild(videoElement);
+}
+
+function replaceAllVideos() {
+  const originalVideos = document.querySelectorAll('video');
+
+  originalVideos.forEach((video) => {
+    // Check if the video is not already replaced by checking the src
+    if (video.src !== videoSource) {
+      replaceVideo(video);
+    }
+  });
+}
+
+// Continuously attempt to replace videos at an interval
+const intervalId = setInterval(replaceAllVideos, 1000);
+
+// If you want to stop this process, use clearInterval(intervalId);
 
 `;
 
-export default { initial, processImages, video };
+const video = `
+// Inject CSS to hide all video and img elements and potential video-related elements immediately
+var injectStyles = document.createElement('style');
+injectStyles.innerHTML =
+  'video, img, .video-element, [style*="background-image"], [style*="background: url"] {' +
+  '  display: none !important;' +
+  '  background: none !important;' +
+  '}';
+document.head.appendChild(injectStyles);
+
+// Function to remove all video and img elements and elements with a background image
+function obliterateMedia() {
+  var allVideosAndImages = document.querySelectorAll('video, img, .video-element');
+  allVideosAndImages.forEach(function(media) {
+    if (media.parentNode) {
+      if(media.tagName.toLowerCase() === 'video') {
+        media.removeAttribute('src'); // Clear the source for videos
+        media.removeAttribute('poster'); // Clear the poster image for videos
+        media.load(); // Load the video with empty source to cancel current load
+      }
+      // Remove the media element from the DOM
+      media.parentNode.removeChild(media);
+    }
+  });
+  
+  // Also remove elements that might be placeholders with background images
+  var elementsWithBackgroundImage = document.querySelectorAll('[style*="background-image"], [style*="background: url"]');
+  elementsWithBackgroundImage.forEach(function(element) {
+    element.style.backgroundImage = 'none';
+  });
+}
+
+// Run the function to obliterate all media immediately
+obliterateMedia();
+
+// Set an interval to check for new media and placeholders every 3 seconds
+var intervalId = setInterval(obliterateMedia, 3000);
+
+// Optional: Clear the interval with clearInterval(intervalId) when it's no longer needed.
+
+`;
+
+const img = `
+var inject_styles___________________ = document.createElement( 'style' );
+inject_styles___________________.innerHTML = 'div { background-image: none !important; background-url: none !important; };'
+document.body.appendChild( inject_styles___________________ );
+
+var inject_styles_______________ = document.createElement( 'style' );
+inject_styles_______________.innerHTML = 'span { background-image: none !important; };'
+document.body.appendChild( inject_styles_______________ );
+
+var inject_styles__________________ = document.createElement( 'style' );
+inject_styles__________________.innerHTML = 'video { display: none !important; background-image: none !important; }'
+document.body.appendChild( inject_styles__________________ );
+
+var inject_styles___________ = document.createElement( 'style' );
+inject_styles___________.innerHTML = 'video-element { display: none !important; background-image: none !important; }'
+document.body.appendChild( inject_styles___________ );
+
+var inject_styles__image = document.createElement( 'style' );
+inject_styles__image.innerHTML = 'img { display: none !important;}'
+document.body.appendChild( inject_styles__image );
+
+var inject_styles_iframe = document.createElement( 'style' );
+inject_styles_iframe.innerHTML = 'iframe { display: none !important;}'
+document.body.appendChild( inject_styles_iframe );
+
+`;
+
+export default {
+  initial,
+  processImages,
+  //  video: video2
+  video: img,
+};
