@@ -85,10 +85,19 @@ export function Browse() {
         }}
         style={tw`w-full h-full`}
         validKeysDown={[
-          "Enter",
+          // "Enter",
           // "Shift",
+          "B",
+          "Escape",
           "n",
-          // "rightArrow",
+          "Home",
+          "Control",
+          "Meta",
+          "MetaKey",
+          "metaKey",
+          "controlKey",
+          "meta",
+          // "Ctrl+Enter",
           // "B",
           // "KeyA",
           // "Alt",
