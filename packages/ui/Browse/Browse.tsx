@@ -80,8 +80,10 @@ export function Browse() {
         onKeyDown={(event) => {
           console.log({
             d: event.nativeEvent.key,
+            e: event.nativeEvent,
           });
           Alert.alert("Bro");
+          // if (event?.nativeEvent?.metaKey)
         }}
         style={tw`w-full h-full`}
         validKeysDown={[
@@ -90,6 +92,7 @@ export function Browse() {
           "B",
           "Escape",
           "n",
+          "N",
           "Home",
           "Control",
           "Meta",
@@ -97,6 +100,9 @@ export function Browse() {
           "metaKey",
           "controlKey",
           "meta",
+          "PageUp",
+          "Backspace",
+          "Tab",
           // "Ctrl+Enter",
           // "B",
           // "KeyA",
