@@ -7,6 +7,7 @@
     "macos": "turbo dev --filter=macos",
     "ios": "turbo dev --filter=mobile",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "standup": "yarn clean && yarn && yarn pods:macos && yarn macos",
     "clean": "rm -rf yarn.lock && rm -rf node_modules && rm -rf ./apps/*/node_modules && rm -rf ./apps/*/*/Podfile.lock && rm -rf ./apps/*/*/Pods && rm -rf ./apps/*/*/build",
     "pods:macos": "cd apps/macos/macos && pod install",
     "pods:ios": "cd apps/mobile/ios && pod install",

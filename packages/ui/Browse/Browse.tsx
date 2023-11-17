@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View } from "react-native";
+import { Alert, Keyboard, View } from "react-native";
 import { WebView } from "react-native-webview";
 import { atoms } from "../lib/atoms";
 import inject from "../lib/inject";
@@ -19,6 +19,23 @@ export function Browse() {
   const [search, setSearch] = useState("");
   const active = useAtomValue(atoms.activeTab);
   const [tabs, setTabs] = useAtom(atoms.tabs);
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      console.log(`Key pressed: ${event.key}`);
+      Alert.alert("YAY");
+      // Add your logic to handle specific key presses here
+    };
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      handleKeyPress
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const onEnter = useCallback(() => {
     const { url, term } = formatUrl(search);
@@ -43,17 +60,40 @@ export function Browse() {
     webview.current?.injectJavaScript(inject.video);
   }, [current?.url]);
 
+  const onBack = useCallback(() => webview.current?.goBack(), []);
+  const onForward = useCallback(() => webview.current?.goForward(), []);
+  const onRefresh = useCallback(() => webview.current?.reload(), []);
+
   return (
     <>
       <Header
-        onBack={() => webview.current?.goBack()}
+        onBack={onBack}
         onEnter={onEnter}
-        onForward={() => webview.current?.goForward()}
-        onRefresh={() => webview.current?.reload()}
+        onForward={onForward}
+        onRefresh={onRefresh}
         search={search}
         setSearch={setSearch}
       />
-      <View style={tw`w-full h-full`}>
+      <View
+        // enableFocusRing
+        focusable
+        onKeyDown={(event) => {
+          console.log({
+            d: event.nativeEvent.key,
+          });
+          Alert.alert("Bro");
+        }}
+        style={tw`w-full h-full`}
+        validKeysDown={[
+          "Enter",
+          // "Shift",
+          "n",
+          // "rightArrow",
+          // "B",
+          // "KeyA",
+          // "Alt",
+        ]}
+      >
         <WebView
           forceDarkOn
           injectedJavaScript={`
@@ -86,36 +126,17 @@ export function Browse() {
         
           setInterval(checkPageChange, 2000)
         `}
-          // injectedJavaScriptBeforeContentLoaded={injectStyles}
-
-          // injectedJavaScriptBeforeContentLoaded={inject.video}
-          // onLoadEnd={() => {
-          //   webview.current?.injectJavaScript(inject.video);
-          // }}
-          injectedJavaScriptBeforeContentLoaded={`
-          ${inject.video}
-          const observer = new MutationObserver(mutations => {
-            mutations.forEach(mutation => {
-              if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-                mutation.addedNodes.forEach(node => {
-                  if (node.nodeName === 'IMG') {
-                    node.style.display = 'none';
-                  }
-                });
-              }
-            });
-          });
-        
-          observer.observe(document.body, { childList: true, subtree: true });
-        
-          `}
+          mediaPlaybackRequiresUserAction
+          onLoadEnd={(e) => console.log("load end", e)}
+          onLoadProgress={(e) => console.log("load progress", e)}
+          onLoadStart={(e) => {
+            console.log("load start", e);
+          }}
           onNavigationStateChange={(e) => {
             console.log(e.url);
             webview.current?.injectJavaScript(inject.video);
           }}
           style={tw`flex h-full flex-1`}
-          mediaPlaybackRequiresUserAction
-          // injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
           onMessage={(e) => {
             if (e.nativeEvent.data) {
               const parsed = JSON.parse(e.nativeEvent.data);
@@ -130,6 +151,16 @@ export function Browse() {
           ref={webview}
           // injectedJavaScriptBeforeContentLoaded={inject.initial}
           source={{ uri: url }}
+          // injectedJavaScriptBeforeContentLoaded={injectStyles}
+          // injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
+          // injectedJavaScriptBeforeContentLoaded={inject.video}
+          // onLoadEnd={() => {
+          //   webview.current?.injectJavaScript(inject.video);
+          // }}
+          // injectedJavaScriptBeforeContentLoaded={`
+          // ${inject.video}
+
+          // `}
         />
       </View>
     </>
