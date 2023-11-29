@@ -64,6 +64,15 @@ export function Browse() {
   const onForward = useCallback(() => webview.current?.goForward(), []);
   const onRefresh = useCallback(() => webview.current?.reload(), []);
 
+  const onKeyDown = useCallback((event) => {
+    if (event?.nativeEvent?.metaKey && event?.nativeEvent?.key === "n") {
+      Alert.alert("Window");
+    }
+    if (event?.nativeEvent?.metaKey && event?.nativeEvent?.key === "k") {
+      Alert.alert("Close");
+    }
+  }, []);
+
   return (
     <>
       <Header
@@ -75,39 +84,10 @@ export function Browse() {
         setSearch={setSearch}
       />
       <View
-        // enableFocusRing
         focusable
-        onKeyDown={(event) => {
-          console.log({
-            d: event.nativeEvent.key,
-            e: event.nativeEvent,
-          });
-          Alert.alert("Bro");
-          // if (event?.nativeEvent?.metaKey)
-        }}
+        onKeyDown={onKeyDown}
         style={tw`w-full h-full`}
-        validKeysDown={[
-          // "Enter",
-          // "Shift",
-          "B",
-          "Escape",
-          "n",
-          "N",
-          "Home",
-          "Control",
-          "Meta",
-          "MetaKey",
-          "metaKey",
-          "controlKey",
-          "meta",
-          "PageUp",
-          "Backspace",
-          "Tab",
-          // "Ctrl+Enter",
-          // "B",
-          // "KeyA",
-          // "Alt",
-        ]}
+        validKeysDown={["k", "n"]}
       >
         <WebView
           forceDarkOn
